@@ -30,10 +30,18 @@ export default function Home() {
 						<span className="font-semibold text-gray-800">
 							{m.role === "user" ? "Human: " : "AI: "}
 						</span>
-						<span className="text-gray-600">{m.content}</span>
+						<span className="text-gray-600">
+							{m.role === "user" ? m.content : ""}
+						</span>
 					</div>
 				))}
 
+				{isLoading && (
+					<div className="flex items-center justify-center space-x-2">
+						<div className="w-6 h-6 rounded-full border-4 border-t-4 border-blue-600 animate-spin" />
+						<span className="text-gray-600">Loading...</span>
+					</div>
+				)}
 				{!isLoading && messages.length !== 0 && (
 					<div className="w-full max-w-6xl mt-8">
 						<Sandpack
@@ -46,13 +54,11 @@ export default function Home() {
 								showTabs: false,
 							}}
 							files={{
-								// ... existing code ...
 								"App.tsx":
 									messages[messages.length - 1] &&
 									messages[messages.length - 1].role !== "user"
 										? messages[messages.length - 1].content
 										: "",
-								// ... existing code ...
 								"/public/index.html": `<!DOCTYPE html>
                     <html lang="en">
                       <head>
@@ -84,7 +90,7 @@ export default function Home() {
 						className="w-full rounded border border-gray-300 text-gray-700 p-3"
 						value={input}
 						onChange={handleInputChange}
-						rows={4} // 必要に応じて行数を調整
+						rows={4}
 					/>
 					{error && <p className="text-red-500">{error}</p>}
 					<button
